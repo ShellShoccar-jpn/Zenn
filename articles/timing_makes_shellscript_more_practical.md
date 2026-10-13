@@ -3,7 +3,7 @@ title: "シェルスクリプトの時間精度を向上させると急に面白
 emoji: "🚴"
 type: "idea"
 topics: ["unix", "linux", "shellscript", "iot", "posix"]
-published: false
+published: true
 ---
 
 # イントロダクション
@@ -12,11 +12,11 @@ published: false
 
 そのためのUNIXコマンドコレクションを作ったので紹介しつつ、面白いことをいくつか披露する。
 
-## 準備（インストール）
+# 準備（インストール）
 
 コマンドコレクションの名前は「[tokideli（トキデリ）](https://github.com/ShellShoccar-jpn/tokideli)」で、これをインストールする。インストールの仕方は次のとおり。
 
-### Homebrewが使える人
+## Homebrewが使える人
 
 Homebrew tapという野良パッケージを用意したので、次の二つのコマンドを叩くだけ。
 
@@ -25,7 +25,7 @@ $ brew tap ShellShoccar-jpn/tap
 $ brew install tokideli
 ```
 
-### その他の環境の人
+## その他の環境の人
 
 GitHubからソースコードをcloneしてビルドして、パスを通す。cloneしたら、ビルドとパス通しをやってくれるスクリプトを作ったので、つまり、下記のコマンドを実行すればよい。
 
