@@ -18,7 +18,7 @@ published: true
 
 ## Homebrewが使える人
 
-Homebrew tapという野良パッケージを用意したので、次の二つのコマンドを叩くだけ。
+Homebrew tap（Homebrewで野良パッケージを作る仕組み）に対応させたので、次の二つのコマンドを叩くだけ。
 
 ```
 $ brew tap ShellShoccar-jpn/tap
@@ -27,7 +27,7 @@ $ brew install tokideli
 
 ## その他の環境の人
 
-GitHubからソースコードをcloneしてビルドして、パスを通す。cloneしたら、ビルドとパス通しをやってくれるスクリプトを作ったので、つまり、下記のコマンドを実行すればよい。
+GitHubからソースコードをcloneしてビルドして、パスを通す。ただし、cloneした後、ビルドとパス通しをやってくれるスクリプトは作ったので、つまり、下記のコマンドを実行すればよい。
 
 ```
 # 管理者権限でインストールしたい人向け
@@ -57,45 +57,45 @@ $ fortune | valve 9600bps
 
 ![fortuneメッセージをノスタルジックに表示した例](https://raw.githubusercontent.com/ShellShoccar-jpn/tokideli-assets/main/article_figs/images/fortune_valve_demo.gif)
 
-なお、`fortune`コマンドが無いという人は、`apt`や`brew`でインストールしてもらってもいいし、手近なテキストファイルを`cat`して[valveコマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)に流してもらっても構わない。
+なお、[`fortune`コマンド](https://ja.wikipedia.org/wiki/Fortune_(UNIX))が無いという人は、`apt`や`brew`でインストールしてもらってもいいし、手近なテキストファイルを`cat`して[`valve`コマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)に流してもらっても構わない。
 
 ## SLをノロノロ走らせる
 
-UNIXには[`sl`](https://www.tkl.iis.u-tokyo.ac.jp/~toyoda/)というコマンドがある。`ls`コマンドをtypoして"sl"と打ってしまうと、汽車が走り、通り過ぎるまで何もできないという嫌がらせコマンドだ。（これもやはり、入っていない人は`apt`や`brew`でインストールしておいてもらいたい）
+UNIXには[`sl`](https://www.tkl.iis.u-tokyo.ac.jp/~toyoda/)というコマンドがある。`ls`コマンドをtypoして"sl"と打ってしまうと、SLが走り、通り過ぎるまで何もできないという嫌がらせコマンドだ。（これもやはり、入っていない人は`apt`や`brew`でインストールしておいてもらいたい）
 ![slコマンド（通常運行）](https://raw.githubusercontent.com/ShellShoccar-jpn/tokideli-assets/main/article_figs/images/sl_demo.gif)
 
-そして次のコマンドを打ち込むと、パイプの転送速度を9600bpsに制限しているおかげで汽車がノロノロと走り出す。
+そして次のコマンドを打ち込むと、パイプの転送速度を9600bpsに制限しているおかげでSLがノロノロとまかり通ってターミナルを遮る。
 ```sh:
 $ sl | valve 9600bps
 ```
 ![slコマンド（ノロノロ運転）](https://raw.githubusercontent.com/ShellShoccar-jpn/tokideli-assets/main/article_figs/images/sl_valve_demo.gif)
 
-「より、鬱陶しくなっただけじゃねーか！」と思うかもしれないが、[Ctrl]+[C]による中断ができるのでウザくなったら止めてくれ。（ただし、その後`reset`コマンドを実行して画面の乱れを直すこと）
+「余計に鬱陶しくなっただけじゃねーか！」と思うかもしれないが、[Ctrl]+[C]による中断ができるのでウザくなったら止めてくれ。（ただし、その後`reset`コマンドを実行して画面の乱れを直すこと）
 
 ## レートリミットでBANされないようにDLする
 
 次は少し実用的な例を紹介しよう。
 
-何らかの理由で連番ファイルを大量にダウンロードしたいことがあるだろう（あるよな？）。だが、間髪入れずにダウンロードするとBANされてしまうかもしれないので、レートリミットをしっかり守ってダウンロードしたいと考えたとする。そんな時に役立つのがやっぱり[valveコマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)だ。
+何らかの理由で連番ファイルを大量にダウンロードしたいことがあるだろう（あるよな？）。だが、間髪入れずにダウンロードするとBANされてしまうかもしれないので、レートリミットをしっかり守ってダウンロードしたいと考えたとする。そんな時に役立つのがやっぱり[`valve`コマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)だ。
 
 例えば、3秒より短い間隔でファイルをダウンロードしていると、やがてレートリミットに引っかかってBANされる恐れのあるWebサイトがあったとする。そういう時は次のようなワンライナーを書けば、`while`～`done`の中のコマンドの実行時間に多少揺らぎがあっても3秒インターバルでループするようになるので、レートリミットを守ることができる。（ただし、中のコマンドの実行時間が3秒以上かかると次の周回でその分短くなるので注意😉）
 ```sh:
 $ seq -f '%02.0f' 1 50 | valve -l 3s | while read n; do wget "https://example.com/file_${n}.jpg"; done
 ```
-なお、[valveコマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)に付けた、`-l`オプションは「行単位にウェイトを入れるようにせよ」という意味で、この例では3秒ごとに1行が出力される。
+なお、[`valve`コマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)に付けた、`-l`オプションは「行単位にウェイトを入れるようにせよ」という意味で、この例では3秒ごとに1行が出力される。
 
 実際に動かしてみると、次の画像のようにきちんと3秒間隔でダウンロードが実行されていていい感じである。
 ![valve+wgetで何かの連番ファイルをダウンロードする](https://raw.githubusercontent.com/ShellShoccar-jpn/tokideli-assets/main/article_figs/images/wget_valve_demo.gif)
 
-ここでは、wgetコマンドを使ったファイルダウンロードを例にしたが、こういうワンライナーやシェルスクリプトを書けば、正確なインターバルでコマンドを連続実行できるということだ。
+ここでは、[`wget`コマンド](https://www.gnu.org/software/wget/)を使ったファイルダウンロードを例にしたが、こういうワンライナーやシェルスクリプトを書けば、どんなコマンドも正確なインターバルで連続実行できるということだ。
 
 ## `yes`コマンドの新たな使い道（パルス発生器）
 
-「[yesコマンド](https://ja.wikipedia.org/wiki/Yes_(UNIX))の使い道を説明せよ」と言われたら、多くの人は「何度も繰り返される`(y/n)?`質問にyと答え続けるものぐさコマンドで、それ以外に使い道は無い」と答えることだろう。しかし、[valveコマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)と組み合わせることによって、組み込み機器におけるパルス発生器としての役割が爆誕するのだ。
+「[`yes`コマンド](https://ja.wikipedia.org/wiki/Yes_(UNIX))の使い道を説明せよ」と言われたら、多くの人は「何度も繰り返される『`(y/n)?`質問』に`y`と答え続けるものぐさコマンドで、それ以外に使い道は無い」と答えることだろう。しかし、[`valve`コマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)と組み合わせることによって、組み込み機器における**パルス発生器としての役割が爆誕する**のだ。
 
-次の図のように、Raspberry Piとオシロスコープ、そして参照用のパルスジェネレーターを接続する。
+次の図のように、[Raspberry Pi](https://www.raspberrypi.com/)とオシロスコープ、そして参照用のパルスジェネレーターを接続する。
 ![Raspberry Piとオシロスコープ、参照用パルスジェネレーターの接続図](https://raw.githubusercontent.com/ShellShoccar-jpn/tokideli-assets/main/valve_as_wave_generator_on_raspi_fig01.png)
-そしてRaspberry Pi上で次のワンライナーを動かすと、GPIO端子から指定周波数の方形波が出てくるのだ。
+そして[Raspberry Pi](https://www.raspberrypi.com/)上で次のワンライナーを動かすと、GPIO端子から指定周波数の方形波が出てくるのだ。
 ```sh:
 $ yes $(printf '0\n1') | valve -l TIME > /sys/class/gpio/gpio2/value
 ```
@@ -107,13 +107,13 @@ $ yes $(printf '0\n1') | valve -l TIME > /sys/class/gpio/gpio2/value
 | 1kHz | ≒ 0.5ms | <https://youtu.be/1WZZLyjXYvg> |
 | 10kHz | ≒ 50us | <https://youtu.be/a-X0ydGcugY> |
 
-Raspberry Piという安いコンピューターであっても、1kHz程度までなら実用的なパルスが出せていることがわかる。**パルスの源は[valveコマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)ではなく、Yes！そのとおり、[yesコマンド](https://ja.wikipedia.org/wiki/Yes_(UNIX))だ。**
+[Raspberry Pi](https://www.raspberrypi.com/)という安いコンピューターであっても、1kHz程度までなら実用的なパルスが出せていることがわかる。**パルスの源は[`valve`コマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)ではなく、Yes！そのとおり、[`yes`コマンド](https://ja.wikipedia.org/wiki/Yes_(UNIX))だ。**
 
 なお、この実験に関する詳しいレポートは[valveコマンドをRaspberry Pi上で方形波発生器として使う](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve_as_wave_generator_on_raspi.info.ja.md)というドキュメントを参照のこと。
 
 ## "hello, world!"のタイプタイミングの記録・再生
 
-[tokideli（トキデリ）](https://github.com/ShellShoccar-jpn/tokideli)には18個もコマンドがあるのに、[valveコマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)の使用例ばかりじゃ勿体無いので、他のコマンド（[typeliner](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/typeliner.man.ja.md)、[linets](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/linets.man.ja.md)、[tscat](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/tscat.man.ja.md)）の使用例も紹介しよう。
+[tokideli（トキデリ）](https://github.com/ShellShoccar-jpn/tokideli)には18個もコマンドがあるのに、[`valve`コマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)の使用例ばかりじゃ勿体無いので、他のコマンド（[`typeliner`](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/typeliner.man.ja.md)、[`linets`](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/linets.man.ja.md)、[`tscat`](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/tscat.man.ja.md)）の使用例も紹介しよう。
 
 さて、プログラマーの間では何か新しいことを始めるといったら「[hello, world!](https://ja.wikipedia.org/wiki/Hello_world)」を表示させるのが定番である。ここでは一捻りして、キーボードから"hello, world!"とタイプするそのタイミングを含めて表示してみよう。
 
@@ -124,11 +124,11 @@ $ typeliner -e | linets -3 > hw.log
 （最後に[Ctrl]+[D]を押して記録を終了させる）
 ```
 これら二つのコマンドについて補足をすると次のとおりだ。
-* [typeliner](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/typeliner.man.ja.md)
+* [`typeliner`](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/typeliner.man.ja.md)
   * キーボードを一文字タイプするたびに標準出力へ文字を送ると同時に、改行を付け足して1文字1行化するというコマンド。このコマンドを使わないと、[Enter]キーを押すまで標準出力には1文字も送られない。
   * `-e`は、今打ち込んだ文字が目視できるようにローカルエコーするためのオプション。
-* [linets](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/linets.man.ja.md)
-  * 到来した各行の先頭にタイムスタンプを付けるコマンド。（lineにタイムスタンプtsを付ける）
+* [`linets`](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/linets.man.ja.md)
+  * 到来した各行の先頭にタイムスタンプを付けるコマンド。（lineにタイムスタンプtsを付けることが名前の由来）
   * `-3`とは、小数点以下3桁、つまりミリ秒精度のタイムスタンプにせよというオプション。
   * 他のオプションを付けない場合、タイムスタンプは`YYYYMMDDhhmmss.nnn`の形式になる。
 
@@ -155,7 +155,7 @@ $ typeliner -e | linets -3 > hw.log
 $ tscat -yZ hw.log
 ```
 コマンドの補足
-* [tscat](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/tscat.man.ja.md)
+* [`tscat`](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/tscat.man.ja.md)
   * 行頭にタイムスタンプがついたテキストデータを受け取り、そのタイムスタンプの示す日時になったらタイムスタンプを外してその行を標準出力するというコマンド。[linets](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/linets.man.ja.md)の逆。（タイムスタンプtsに対応したcatコマンドという意味）
   * `-Z`は、先頭行のタイムスタンプを基準に後続の行の出力タイミングを決めるという意味のオプション。記録したタイムスタンプは当然ながらすべて過去の日時なので、これを付けないと、全行が今すぐ出力されてしまう。
   * `-y`は、元々が文字単位だったデータを復元するためのオプション。これがないと、各文字が1行ごと（縦並び）に表示されてしまう。
@@ -173,27 +173,27 @@ $ typeliner -e | linets -3Z > 337.log
 （ここで、三三七拍子のリズムで何かの文字キーを叩く）
 （終わったら[Ctrl]+[D]を押して記録を終了させる）
 ```
-[linets](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/linets.man.ja.md)に今度は`-Z`というオプションを付けているが、これは到来した最初の行を0とした経過時間を示すタイムスタンプ形式にするという意味である。なぜそうするかは、トリック再生する時にわかる。
+[`linets`](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/linets.man.ja.md)に今度は`-Z`というオプションを付けているが、これは到来した最初の行を0とした経過時間を示すタイムスタンプ形式にするという意味である。なぜそうするかは、トリック再生をする時にわかる。
 
 では再生だ。まずは等速で再生するが、次のワンライナーは、三三七拍子のリズムが分かりやすいようにビープ音を付けて再生するという例だ。
 ```sh:
 $ cat 337.log | sed $(printf 's/$/\007/') | tscat -zZ
 ```
-[tscat](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/tscat.man.ja.md)に今度は`-z`オプションが追加されているが、これは[linets](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/linets.man.ja.md)で作成されたタイムスタンプ形式が、最初の行を基準とする経過時間になっていることを知らせるためのものだ。
+[`tscat`](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/tscat.man.ja.md)に今度は`-z`オプションが追加されているが、これは[`linets`](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/linets.man.ja.md)で作成されたタイムスタンプ形式が、最初の行を基準とする経過時間になっていることを知らせるためのものだ。
 
 再生の様子を収録した動画を披露する前に、倍速再生と1/2倍速再生のワンライナーも記しておこう。
 ```sh:
 $ cat 337.log | awk '{print $1/2,$2}' | sed $(printf 's/$/\007/') | tscat -zZ
 $ cat 337.log | awk '{print $1*2,$2}' | sed $(printf 's/$/\007/') | tscat -zZ
 ```
-awkコマンドで1列目にあるタイムスタンプを1/2にしたり、2倍にしているのがミソ。これがやりたいから、1行目を基準とした経過秒数にしたわけだ。（年月日時分秒形式だったりUNIX時間形式である場合はできないでしょ？）
+`awk`コマンドで1列目にあるタイムスタンプを1/2にしたり、2倍にしているのがミソ。これがやりたいから、1行目を基準とした経過秒数にしたわけだ。（年月日時分秒形式だったりUNIX時間形式である場合はできないでしょ？）
 
-では、記録から再生までの様子を収録した動画をご覧いただこう。画面が三三七拍子のタイミングでシュパッシュパッと光っているのがわかるだろう。
+では、記録から再生までの様子を収録した動画をご覧いただこう。画面が三三七拍子のタイミングでシュパッシュパッと光っている（可視化されたビープ音による）のがわかるだろう。
 ![三三七拍子の記録・再生・倍速再生・スロー再生](https://raw.githubusercontent.com/ShellShoccar-jpn/tokideli-assets/main/article_figs/images/typing_337_demo.gif)
 
 ## `delay`コマンドでやまびこヤッホー
 
-標準入力からやってきたデータを一定秒数遅らせて標準出力に送る[delay](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/delay.man.ja.md)というコマンドがある。これで手っ取り早く遊ぶべく、やまびこを鳴らしてみようと思う。
+標準入力からやってきたデータを一定秒数遅らせて標準出力に送る[`delay`](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/delay.man.ja.md)というコマンドがある。これで手っ取り早く遊ぶべく、やまびこを鳴らしてみようと思う。
 
 まずは、次のワンライナーを打ち込む。打ち込んだら、"yo-ho!"（「ヤッホー！」という意味）と素早く打ち込んで[Enter]キーを押してもらいたい。
 ```sh:
@@ -214,17 +214,17 @@ $ typeliner -t '' | (( tee /dev/stderr | delay 3s ) 2>&1 | tee /dev/stderr | del
 これらの様子を撮影した動画はこれだ。
 ![やまびこ](https://raw.githubusercontent.com/ShellShoccar-jpn/tokideli-assets/main/article_figs/images/delay_echo_demo.gif)
 
-なお、[typelinerコマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/typeliner.man.ja.md)で、`-t ''`というオプションを付けているが、これは1文字ごとに改行を挿入していたのをやめて、オプションで指定した文字を挿入せよという意味。ここではそれが空文字になっているので、つまり改行するなという意味になる。
+なお、[`typeliner`コマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/typeliner.man.ja.md)で、`-t ''`というオプションを付けているが、これは1文字ごとに改行を挿入していたのをやめて、オプションで指定した文字を挿入せよという意味。ここではそれが空文字になっているので、つまり改行するなという意味になる。
 
 ## `stdbuf`効かない問題を解決
 
-最後に、[ptw](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/ptw.man.ja.md)というコマンドを紹介しておく。一言で説明するならこれは[stdbuf](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html)コマンドの強化版である。
+最後に、[`ptw`](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/ptw.man.ja.md)というコマンドを紹介しておく。一言で説明するならこれは[`stdbuf`](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html)コマンドの強化版である。
 
-そもそも[stdbuf](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html)というコマンドがなぜ作られたのかといえば、多くのコマンドは処理を効率化させるために、ある程度テキストデータが溜まってから処理をしようとするからだ。人間だってそうだろう。100通の書類に承認印を押して1通ずつ個別の封筒に入れる時、1通ずつ押印・封入するよりも、とりあえず100通全部机に並べて押印し、封入はあとでまとめて行おうとするだろう。しかし、それをコマンドにされてしまうと、せっかくタイミングを調整して送ったデータのタイミングが壊れてしまう。それを防ぐために有効というわけだ。
+そもそも[`stdbuf`](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html)というコマンドがなぜ作られたのかといえば、多くのコマンドは処理を効率化させるために、ある程度テキストデータが溜まってから処理をしようとするからだ。人間だってそうだろう。100通の書類に承認印を押して1通ずつ個別の封筒に入れる時、1通ずつ押印・封入するよりも、とりあえず100通全部机に並べて押印し、封入はあとでまとめて行おうとするだろう。しかし、それをコマンドにされてしまうと、せっかくタイミングを調整して送ったデータのタイミングが壊れてしまう。それを防ぐために有効というわけだ。
 
-ところが、[stdbuf](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html)が効かないケースが結構ある。例えば、みんな大好きPythonも効かないものの一つだ。`python3`コマンドにstdbufを適用しても効かない。
+ところが、[`stdbuf`](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html)が効かないケースが結構ある。例えば、みんな大好きPythonも効かないものの一つだ。`python3`コマンドにstdbufを適用しても効かない。
 
-例えば、次のPythonスクリプト（Hacker News上のスコアの高い記事を抜き出す）を保存し……
+例えば、次のPythonスクリプト（[Hacker News](https://news.ycombinator.com/)上の高スコア記事を抜き出す）を保存し……
 ```python:
 from datetime import datetime
 import requests
@@ -263,12 +263,12 @@ APIにアクセスして、ジワジワと記事が表示される。
 $ python3 best_articles_on_hackernews.py | grep $(date +%Y-%m-%d)
 ```
 
-そこで溜め込みを抑制すべく、`python3`コマンドに[stdbuf](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html)を適用しようとするものの、挙動は全く変わらない。
+そこで溜め込みを抑制すべく、`python3`コマンドに[`stdbuf`](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html)を適用しようとするものの、挙動は全く変わらない。
 ```
 $ stdbuf -o L python3 best_articles_on_hackernews.py | grep $(date +%Y-%m-%d)
 ```
 
-しかし、[ptwコマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/ptw.man.ja.md)だとうまくいく。
+しかし、[`ptw`コマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/ptw.man.ja.md)だとうまくいく。
 ```
 $ ptw python3 best_articles_on_hackernews.py | grep $(date +%Y-%m-%d)
 ```
