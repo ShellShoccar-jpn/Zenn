@@ -97,10 +97,14 @@ $ seq -f '%02.0f' 1 50 | valve -l 3s | while read n; do wget "https://example.co
 ![Raspberry Piとオシロスコープ、参照用パルスジェネレーターの接続図](https://raw.githubusercontent.com/ShellShoccar-jpn/tokideli-assets/main/valve_as_wave_generator_on_raspi_fig01.png)
 そして[Raspberry Pi](https://www.raspberrypi.com/)上で次のワンライナーを動かすと、GPIO端子から指定周波数の方形波が出てくるのだ。
 ```sh:
-$ yes $(printf '0\n1') | valve -l TIME > /sys/class/gpio/gpio2/value
+# 古典的な方法（sysfs）でGPIOを操作する場合
+$ yes "$(printf '0\n1')" | valve -l TIME > /sys/class/gpio/gpio2/value
+
+# 新しい方法（gpiod v2系）でGPIOを操作する場合
+$ yes toggle | valve -l TIME | gpioset -i GPIO2=0
 ```
 
-実際に計測した様子は、次の動画リンクを参照のこと。
+実際に計測した様子（sysfsを利用）は、次の動画リンクを参照のこと。
 | 周波数 | valveに与える値 | その様子を撮影した動画 |
 |---|---|---|
 | 100Hz | ≒ 5ms | <https://youtu.be/e8Qx46Gbz-s> |
