@@ -3,7 +3,7 @@ title: "Improve Your Shell Script's Timing Precision, and It Suddenly Gets Fun"
 emoji: "🚴"
 type: "idea"
 topics: ["unix", "linux", "shellscript", "iot", "posix"]
-published: false
+published: true
 ---
 
 （日本語版は[こちら](timing_makes_shellscript_more_practical)）
