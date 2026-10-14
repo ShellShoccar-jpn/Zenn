@@ -231,7 +231,7 @@ $ typeliner -t '' | (( tee /dev/stderr | delay 3s ) 2>&1 | tee /dev/stderr | del
 ところが、[`stdbuf`](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html)が効かないケースが結構ある。例えば、みんな大好きPythonも効かないものの一つだ。`python3`コマンドにstdbufを適用しても効かない。
 
 例えば、次のPythonスクリプト（[Hacker News](https://news.ycombinator.com/)上の高スコア記事を抜き出す）を保存し……
-```python:
+```python:best_articles_on_hackernews.py
 from datetime import datetime
 import requests
 

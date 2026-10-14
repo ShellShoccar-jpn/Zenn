@@ -231,7 +231,7 @@ So why does [`stdbuf`](https://www.gnu.org/software/coreutils/manual/html_node/s
 Except there are plenty of cases where [`stdbuf`](https://www.gnu.org/software/coreutils/manual/html_node/stdbuf-invocation.html) just doesn't work. Everyone's favorite, Python, is one of them — applying `stdbuf` to the `python3` command has no effect.
 
 For example, save the following Python script (it pulls out high-scoring posts from [Hacker News](https://news.ycombinator.com/))...
-```python:
+```python:best_articles_on_hackernews.py
 from datetime import datetime
 import requests
 
