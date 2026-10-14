@@ -47,7 +47,7 @@ $ tokideli/INSTALLIN.sh $HOME/tokideli
 
 ## 古のパソコン通信を懐かしむ
 
-1990年代くらいまでは、パソコンは電話回線につないでテキスト主体の通信をしていたのだが、通信速度は300bpsとか1200bpsとか9600bpsとかで文字がチョロチョロ流れる世界だった。「ギガ」世代の人はピンと来ないだろうから、[valveコマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)（valveは「弁」の意味）を使ったワンライナーでその速度を体験してもらいたい。（知ってる人は試してみてノスタルジーに浸ってもらいたい）
+1990年代くらいまでは、パソコンは電話回線につないでテキスト主体の通信をしていたのだが、通信速度は300bpsとか1200bpsとか9600bpsとかで文字がチョロチョロ流れる世界だった。「ギガ」世代の人はピンと来ないだろうから、[`valve`コマンド](https://github.com/ShellShoccar-jpn/tokideli/blob/main/manual/valve.man.ja.md)（valveは「弁」の意味）を使ったワンライナーでその速度を体験してもらいたい。（知ってる人は試してみてノスタルジーに浸ってもらいたい）
 
 ```sh:
 $ fortune | valve 300bps
