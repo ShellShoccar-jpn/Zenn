@@ -6,7 +6,7 @@ topics: ["unix", "linux", "shellscript", "iot", "posix"]
 published: true
 ---
 
-(English version is [here](timing_makes_shellscript_more_practical--en.md))
+(English version is [here](timing_makes_shellscript_more_practical--en))
 
 # イントロダクション
 
