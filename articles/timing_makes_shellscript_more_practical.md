@@ -6,6 +6,8 @@ topics: ["unix", "linux", "shellscript", "iot", "posix"]
 published: true
 ---
 
+(English version is [here](timing_makes_shellscript_more_practical.en.md))
+
 # イントロダクション
 
 シェルスクリプトはファイルの整理やコマンドの起動に便利だが、それだけにしか使っていないという人も多いだろう。しかし、高精度（秒未満）で時間が制御できるようになると急に面白くなる。それは、高精度にデータを流すタイミングを制御するとか、高精度にコマンドの起動タイミングを制御するといったことだ。
